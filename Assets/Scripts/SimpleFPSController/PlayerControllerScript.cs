@@ -60,9 +60,7 @@ namespace SimpleFPSController {
             HandleLook();
             HandleMovement();
 
-            if (traveller.WasTeleported) {
-                fixer.BeginCorrection();
-            }
+            if (traveller.WasTeleported) fixer.BeginCorrection();
         }
 
         // --------------------

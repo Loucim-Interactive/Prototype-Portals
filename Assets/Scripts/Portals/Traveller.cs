@@ -76,6 +76,16 @@ namespace Portals {
             }
         }
         
+        public void ResetMaterials() {
+            for (int i = 0; i < TravellerMaterials.Length; i++) {
+                TravellerMaterials[i].SetVector("_SliceCentre", Vector3.zero);
+                TravellerMaterials[i].SetVector("_SliceNormal", Vector3.zero);
+                
+                CloneMaterials[i].SetVector("_SliceCentre", Vector3.zero);
+                CloneMaterials[i].SetVector("_SliceNormal", Vector3.zero);
+            }
+        }
+        
         private Material[] GetMaterials(GameObject obj) {
             var renderers = obj.GetComponentsInChildren<MeshRenderer>();
             var mats = new List<Material>();

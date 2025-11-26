@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SimpleFPSController {
@@ -7,6 +8,7 @@ namespace SimpleFPSController {
         [SerializeField] private Transform grabPoint;        
         [SerializeField] private float grabDistance = 3f;    
         [SerializeField] private float moveSpeed = 12f;     
+        [SerializeField] private float delay = 0.2f;     
         [SerializeField] private float rotateSpeed = 12f;    
         [SerializeField] private LayerMask grabMask;
 
@@ -17,6 +19,7 @@ namespace SimpleFPSController {
 
         private Camera _cam;
         private GrabbedObject _grabbed;
+        private float _timer;
 
         private class GrabbedObject {
             public GameObject Obj;
@@ -28,13 +31,21 @@ namespace SimpleFPSController {
         }
 
         private void Update() {
-            HandleHighlight();
+            //HandleHighlight();
+
+            if (_timer < 0f) {
+                if (_grabbed != null && Input.GetKeyDown(KeyCode.E)) {
+                    Release();
+                    return;
+                }
+                if (_grabbed == null) {
+                    TryGrab();
+                    return;
+                }
+            }
             
-            if (_grabbed != null && Input.GetKeyDown(KeyCode.E))
-                Release();
-            
-            if (_grabbed == null) TryGrab();
-            else MoveGrabbedObject();
+            MoveGrabbedObject();
+            _timer -= Time.deltaTime;
         }
         
         private void HandleHighlight() {
@@ -70,6 +81,7 @@ namespace SimpleFPSController {
             Rigidbody rb = hit.collider.attachedRigidbody;
             if (!rb) return;
             Debug.Log("Grabbing");
+            _timer = delay;
             _grabbed = new GrabbedObject {
                 Obj = rb.gameObject,
                 Rb = rb
@@ -81,6 +93,7 @@ namespace SimpleFPSController {
 
 
         private void MoveGrabbedObject() {
+            if (_grabbed == null) return;
             Rigidbody rb = _grabbed.Rb;
 
             Vector3 targetPos = grabPoint.position;
@@ -96,6 +109,7 @@ namespace SimpleFPSController {
         private void Release() {
             if (_grabbed == null) return;
             Debug.Log("Releasing");
+            _timer = delay;
             _grabbed.Rb.useGravity = true;
             _grabbed.Rb.linearVelocity = Vector3.zero;
             _grabbed.Rb.angularVelocity = Vector3.zero;

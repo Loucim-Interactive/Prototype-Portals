@@ -74,7 +74,7 @@ namespace Portals {
             
             var m = transform.localToWorldMatrix * linkedPortal.transform.worldToLocalMatrix * playerCam.transform.localToWorldMatrix;
             portalCam.transform.SetPositionAndRotation(m.GetColumn(3), m.rotation);
-            
+            FixNearClipPlane();
             portalCam.Render();
             screen.enabled = true;
         }
@@ -119,6 +119,7 @@ namespace Portals {
         private void OnTravellerExit(Traveller traveller) {
             if (travellers.Contains(traveller)) {
                 traveller.ExitVisualTeleportation();
+                traveller.ResetMaterials();
                 travellers.Remove(traveller);
             }
         }
@@ -147,6 +148,18 @@ namespace Portals {
             screenT.localScale = new Vector3(screenT.localScale.x, screenT.localScale.y, screenThickness);
             screenT.localPosition = Vector3.forward * (screenThickness * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f));
             return screenThickness;
+        }
+
+        private void FixNearClipPlane() {
+            Transform clipPlane = transform;
+            int dot = Math.Sign(Vector3.Dot(clipPlane.forward, transform.position - portalCam.transform.position));
+            
+            Vector3 camSpacePos = portalCam.worldToCameraMatrix.MultiplyPoint(clipPlane.position);
+            Vector3 camSpaceNormal = portalCam.worldToCameraMatrix.MultiplyVector(clipPlane.forward) * dot;
+            float camSpaceDist = -Vector3.Dot(camSpacePos, camSpaceNormal);
+            
+            Vector4 clipPlaneCamSpace = new Vector4(camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDist);
+            portalCam.projectionMatrix = playerCam.CalculateObliqueMatrix(clipPlaneCamSpace);
         }
 
         #region Helpers
