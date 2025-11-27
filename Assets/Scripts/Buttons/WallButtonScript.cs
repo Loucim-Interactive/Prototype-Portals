@@ -1,16 +1,41 @@
+using System.Collections;
 using UnityEngine;
 
-public class WallButtonScript : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+namespace Buttons {
+    public class WallButtonScript : Interactable.Interactable
     {
-        
-    }
+        [Header("References")]
+        [SerializeField] private GameObject prefab;
+        [SerializeField] private Transform spawnPos;
+        [SerializeField] private Transform buttonTransform;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        [Header("Settings")]
+        [SerializeField] private float turnAmount = 15f; 
+        [SerializeField] private float turnDuration = 0.15f; // speed
+
+        private Coroutine _coroutine;
+
+        public override void Interact()
+        {
+            if (_coroutine != null) return;
+
+            Instantiate(prefab, spawnPos.position, Quaternion.identity);
+            _coroutine = StartCoroutine(VisualButtonClick());
+        }
+
+        private IEnumerator VisualButtonClick()
+        {
+            Quaternion startRot = buttonTransform.localRotation;
+            Quaternion endRot = startRot * Quaternion.Euler(turnAmount, 0f, 0f);
+
+            float t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime / turnDuration;
+                buttonTransform.localRotation = Quaternion.Lerp(startRot, endRot, t);
+                yield return null;
+            }
+            _coroutine = null;
+        }
     }
 }

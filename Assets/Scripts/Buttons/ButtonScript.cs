@@ -3,11 +3,14 @@ using Door;
 using UnityEngine;
 
 namespace Buttons {
-    public class ButtonScript : MonoBehaviour
+    public class ButtonScript : Interactable.Interactable
     {
+        [Header("References")]
         public Transform buttonTransform;
-        public float activatedThreshold = 0.1f;
         public DoorScript[] doors;
+        
+        [Header("Settings")]
+        public float activatedThreshold = 0.1f;
         
         private bool _wasActivated = false;
 
@@ -15,23 +18,22 @@ namespace Buttons {
             doors = FindObjectsByType<DoorScript>(FindObjectsSortMode.None);
         }
 
-        void Update()
+        private void Update()
         {
             if (buttonTransform.localPosition.y < activatedThreshold) {
-                if (!_wasActivated) ActivateButton(true);
+                if (!_wasActivated) Interact();
                 _wasActivated = true;
             }
             else {
-                if (_wasActivated) ActivateButton(false);
+                if (_wasActivated) Interact();
                 _wasActivated = false;
             }
         }
 
-        void ActivateButton(bool open) {
-            Debug.Log("Activating button");
+        public override void Interact() {
             foreach (var door in doors) {
-                StartCoroutine(open ? door.OpenDoor() : door.CloseDoor());
+                StartCoroutine(_wasActivated ? door.CloseDoor() : door.OpenDoor());
             }
         }
-    }
+    }   
 }

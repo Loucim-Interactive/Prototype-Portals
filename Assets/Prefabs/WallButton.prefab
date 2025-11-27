@@ -77,6 +77,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de49c68047df67542a4b84ec82749727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefab: {fileID: 8871457064762030416, guid: 78a6b82e9a8ab5a49b7b6a874900d012, type: 3}
+  spawnPos: {fileID: 0}
+  buttonTransform: {fileID: 5752639927922222699}
+  turnAmount: 180
+  turnDuration: 0.5
 --- !u!1001 &2169756259753741391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -146,5 +151,10 @@ PrefabInstance:
 --- !u!4 &1843727823956618148 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bdc2460d6576d7042a74ceb98d26d6cb, type: 3}
+  m_PrefabInstance: {fileID: 2169756259753741391}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5752639927922222699 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3329850779861964252, guid: bdc2460d6576d7042a74ceb98d26d6cb, type: 3}
   m_PrefabInstance: {fileID: 2169756259753741391}
   m_PrefabAsset: {fileID: 0}
