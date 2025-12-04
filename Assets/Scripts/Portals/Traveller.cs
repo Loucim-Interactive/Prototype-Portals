@@ -12,6 +12,7 @@ namespace Portals {
         public Vector3 PrevOffset { get; private set; }
         public bool WasTeleported { get; private set; }
             
+        public Collider[] TravellerColliders {get; private set;}
         public Material[] TravellerMaterials { get; private set; }
         public Material[] CloneMaterials {get; private set;}
 
@@ -75,6 +76,21 @@ namespace Portals {
                 CloneMaterials[i].SetVector("_SliceNormal", cloneSliceNormal);
             }
         }
+
+        public void ExcludeLayerTravellerColliders(LayerMask layerMask) {
+            var cols = GetColliders(gameObject);
+            foreach (var col in cols) {
+                col.excludeLayers |= layerMask; // add this layer to excluded set            
+            }
+        }
+        
+        public void ResetExcludeTravellerColliders(LayerMask layerMask) {
+            var cols = GetColliders(gameObject);
+            foreach (var col in cols) {
+                col.excludeLayers &= ~layerMask;  // remove this layer
+            }
+        }
+
         
         public void ResetMaterials() {
             for (int i = 0; i < TravellerMaterials.Length; i++) {
@@ -96,6 +112,16 @@ namespace Portals {
                 }
             }
             return mats.ToArray();
+        }
+        
+        private Collider[] GetColliders(GameObject obj) {
+            var colliders = obj.GetComponentsInChildren<Collider>();
+            var cols = new List<Collider>();
+
+            foreach (Collider col in colliders) {
+                cols.Add(col);
+            }
+            return cols.ToArray();
         }
 
         private void SpawnClone() {

@@ -86,6 +86,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &644208029847777291
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5489169041000053983}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5489169041000053983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644208029847777291}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.078, z: 0.513}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8419235340337534122}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2863902599013817645
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,6 +396,7 @@ Transform:
   m_Children:
   - {fileID: 2096122505433179612}
   - {fileID: 6583455569932944710}
+  - {fileID: 5489169041000053983}
   m_Father: {fileID: 1243866668710897265}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7088868099398061976
@@ -381,6 +413,7 @@ GameObject:
   - component: {fileID: 5626216768145977982}
   - component: {fileID: 8848096700799202447}
   - component: {fileID: 8082670009780486858}
+  - component: {fileID: 6423610730327187269}
   - component: {fileID: 2590365029182248601}
   - component: {fileID: 7455474030684363597}
   m_Layer: 0
@@ -437,7 +470,7 @@ MonoBehaviour:
   groundCheckPos: {fileID: 0}
   fixer: {fileID: 0}
   traveller: {fileID: 0}
-  moveForce: 30
+  moveForce: 25
   sprintFactor: 2.5
   jumpForce: 100
   gravity: 0
@@ -498,6 +531,28 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   highlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+--- !u!114 &6423610730327187269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7088868099398061976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06331b7da51ebe94f821003b4a11d154, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gun: {fileID: 5489169041000053983}
+  prefab: {fileID: 2981864680768085645, guid: e90b111e75f78cb429647850a8f8bc24, type: 3}
+  camScript: {fileID: 0}
+  portalSurfaceLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  portalRot: 180
+  offset: 1
+  portalA: {fileID: 0}
+  portalB: {fileID: 0}
 --- !u!136 &2590365029182248601
 CapsuleCollider:
   m_ObjectHideFlags: 0

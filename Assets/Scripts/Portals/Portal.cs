@@ -20,7 +20,8 @@ namespace Portals {
         [SerializeField] private Color color;
         [SerializeField] private const float CrossingThreshold = 0.05f;
         [SerializeField] private bool isOvalPortal;
-        
+        [SerializeField] private LayerMask travellerColExcludeLayer;
+
         private RenderTexture _viewTexture;
 
         private Transform _debugT;
@@ -30,6 +31,7 @@ namespace Portals {
         #endregion
 
         #region Unity Methods
+        
         private void Awake() {
             playerCam = Camera.main;
             portalCam = GetComponentInChildren<Camera>(true);
@@ -66,10 +68,16 @@ namespace Portals {
                 Debug.Log(traveller.name + " exited");
             }
         }
+        
         #endregion
 
         #region  PUBLIC API
+        
+        public bool IsLinked => linkedPortal != null;
+        
         public void Render() {
+            if (!linkedPortal) return;
+            
             screen.enabled = false;
             CreateViewTexture();
             
@@ -79,9 +87,16 @@ namespace Portals {
             portalCam.Render();
             screen.enabled = true;
         }
+
+        public void SetLinked(Portal linked) {
+            linkedPortal = linked;
+            SyncMaterial();
+        }
+        
         #endregion
 
         #region Traveller Logic
+        
         private void HandleTraveller(Traveller traveller) {
             Transform travellerT = traveller.transform;
             Vector3 currentOffset = travellerT.position - transform.position;
@@ -111,6 +126,7 @@ namespace Portals {
         private void OnTravellerEnter(Traveller traveller) {
             if (!travellers.Contains(traveller)) {
                 traveller.EnterVisualTeleportation();
+                traveller.ExcludeLayerTravellerColliders(travellerColExcludeLayer);
                 ProtectScreenFromClipping(playerCam.transform.position);
                 traveller.SetPrevOffset(traveller.transform.position - transform.position);
                 travellers.Add(traveller);
@@ -120,12 +136,16 @@ namespace Portals {
         private void OnTravellerExit(Traveller traveller) {
             if (travellers.Contains(traveller)) {
                 traveller.ExitVisualTeleportation();
+                traveller.ResetExcludeTravellerColliders(travellerColExcludeLayer);
                 traveller.ResetMaterials();
                 travellers.Remove(traveller);
             }
         }
+        
         #endregion
 
+        #region Visual Effect Logic
+        
         private void CreateViewTexture() {
             var w = Screen.width;
             var h = Screen.height;
@@ -185,6 +205,8 @@ namespace Portals {
             Vector4 clipPlaneCamSpace = new Vector4(camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDist);
             portalCam.projectionMatrix = playerCam.CalculateObliqueMatrix(clipPlaneCamSpace);
         }
+        
+        #endregion
 
         #region Helpers
 
@@ -198,6 +220,18 @@ namespace Portals {
             screen.transform.localPosition = Vector3.zero;
         }
 
+        private void SyncMaterial()
+        {
+            if (!linkedPortal) return;
+
+            // THIS is the correct new instance unity uses at runtime
+            var mat = linkedPortal.screen.material;
+
+            // force the renderTexture to be assigned to the fresh instance
+            if (_viewTexture)
+                mat.SetTexture("_MainTex", _viewTexture);
+        }
+        
         #endregion
 
         #region Debugging

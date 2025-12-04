@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2981864680768085645}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.67, y: 1.757, z: -2.071}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 750984865457042551}
   - {fileID: 2258905811205745900}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5468808011395180318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,7 +53,10 @@ MonoBehaviour:
   portalCam: {fileID: 0}
   travellers: []
   color: {r: 0.021494865, g: 0, b: 1, a: 1}
-  isOvalPortal: 0
+  isOvalPortal: 1
+  travellerColExcludeLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!136 &928243401857797714
 CapsuleCollider:
   m_ObjectHideFlags: 0
