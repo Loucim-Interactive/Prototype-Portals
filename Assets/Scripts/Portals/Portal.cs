@@ -19,6 +19,7 @@ namespace Portals {
         [Header("Settings")]
         [SerializeField] private Color color;
         [SerializeField] private const float CrossingThreshold = 0.05f;
+        [SerializeField] private bool isOvalPortal;
         
         private RenderTexture _viewTexture;
 
@@ -138,6 +139,11 @@ namespace Portals {
         
         private float ProtectScreenFromClipping(Vector3 viewPoint)
         {
+            var screenThickness = isOvalPortal ? ProtectOval(viewPoint) : ProtectSquare(viewPoint);
+            return screenThickness;
+        }
+
+        private float ProtectSquare(Vector3 viewPoint) {
             float halfHeight = playerCam.nearClipPlane * Mathf.Tan(playerCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
             float halfWidth = halfHeight * playerCam.aspect;
             float dstToNearClipPlaneCorner = new Vector3(halfWidth, halfHeight, playerCam.nearClipPlane).magnitude;
@@ -149,7 +155,25 @@ namespace Portals {
             screenT.localPosition = Vector3.forward * (screenThickness * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f));
             return screenThickness;
         }
+        
+        private float ProtectOval(Vector3 viewPoint) {
+            float halfHeight = playerCam.nearClipPlane * Mathf.Tan(playerCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+            float halfWidth = halfHeight * playerCam.aspect;
+            float screenThickness = 10f;
+            
+            Transform screenT = screen.transform;
+            Vector3 scale = screenT.localScale;
 
+            bool camFacingSameDirAsPortal = Vector3.Dot(transform.forward, transform.position - viewPoint) > 0;
+            
+            scale.x = screenThickness; // we use X for some reason. ( other ones squish and crush the screen) and also sum the initial amount (the model was imported badly)
+            screenT.localScale = scale;
+            //
+            screenT.localPosition = Vector3.left * (camFacingSameDirAsPortal ? 0.2f : -0.2f); // same with left, somthing about blender surely
+
+            return screenThickness;
+        }
+        
         private void FixNearClipPlane() {
             Transform clipPlane = transform;
             int dot = Math.Sign(Vector3.Dot(clipPlane.forward, transform.position - portalCam.transform.position));

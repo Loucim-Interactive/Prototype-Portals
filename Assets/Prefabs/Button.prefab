@@ -322,6 +322,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe288bf05c330b742b07628fa580023f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonTransform: {fileID: 5301735747916193881}
+  doors: []
+  activatedThreshold: 0.1
 --- !u!1 &6042200754654373506
 GameObject:
   m_ObjectHideFlags: 0
