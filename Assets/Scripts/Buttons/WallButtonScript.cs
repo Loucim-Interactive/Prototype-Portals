@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -15,10 +16,12 @@ namespace Buttons {
 
         private Coroutine _coroutine;
 
+        public bool Clicked { get; private set; }
+        
         public override void Interact()
         {
             if (_coroutine != null) return;
-
+            Clicked = true;
             Instantiate(prefab, spawnPos.position, Quaternion.identity);
             _coroutine = StartCoroutine(VisualButtonClick());
         }
@@ -36,6 +39,10 @@ namespace Buttons {
                 yield return null;
             }
             _coroutine = null;
+        }
+
+        public void LateUpdate() {
+            Clicked = false;
         }
     }
 }

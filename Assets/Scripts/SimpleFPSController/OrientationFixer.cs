@@ -11,6 +11,7 @@ namespace SimpleFPSController {
         void LateUpdate()
         {
             if (!correcting) return;
+            Debug.Log("Fixing orientation");
 
             // 1. Find the forward direction projected on the world horizontal plane
             Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
