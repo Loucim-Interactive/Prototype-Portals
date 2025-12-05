@@ -56,7 +56,7 @@ MonoBehaviour:
   _armDist: 0.16
   _engageSpeed: 10
   viewDistance: 30
-  viewAngle: 60
+  viewAngle: 35
   obstructionMask:
     serializedVersion: 2
     m_Bits: 256
